@@ -11,6 +11,7 @@
 [ -e "/usr/local/bin/git" ] && alias git="/usr/local/bin/git"
 
 gitLogFormatShort="%C(cyan)%cr %Creset%s"
+gitLogFormatOneline="%C(yellow)%h %C(green)%cn %C(cyan)%cr %Creset%s"
 
 function git-branch-current() {
   printf "%s\n" $(git branch 2> /dev/null | grep -e ^* | tr -d "\* ")
