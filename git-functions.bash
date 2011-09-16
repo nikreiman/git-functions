@@ -101,20 +101,28 @@ function git-tag-sorted() {
   git tag -l | sort -k 1n,1 -k 2n,2 -k 3n,3 -t '.'
 }
 
-function git-tag-next() {
+function git-tag-next-version() {
   local lastTag=$(git-tag-last)
   local nextTag="${lastTag%.*}.$((${lastTag##*.} + 1))"
-  if [ -z "$(grep $nextTag AndroidManifest.xml)" ] ; then
-    echo "You forgot to set the version in the manifest!"
-    return 1
+
+  if ! [ -z "$1" ] ; then
+    local versionFile=$1
+    if [ -z "$(grep $nextTag $versionFile)" ] ; then
+      echo "You forgot to set the current version in $versionFile!"
+      return 1
+    fi
   fi
-  git-log-since-last-tag changelog > changelog.txt
-  $EDITOR changelog.txt
+
+  local changelogFile=/tmp/changelog.txt
+  git-log-since-last-tag changelog > $changelogFile
+  $EDITOR $changelogFile
   echo "Tagging release $nextTag with:"
-  cat changelog.txt
-  git tag -s $nextTag -F changelog.txt
-  pbcopy < changelog.txt
-  echo "Changelog copied to clipboard"
-  rm changelog.txt
+  cat $changelogFile
+  git tag -s $nextTag -F $changelogFile
+  if ! [ -z `which pbcopy` ] ; then
+    pbcopy < $changelogFile
+    echo "Changelog copied to clipboard"
+  fi
+  rm $changelogFile
 }
 
