@@ -97,7 +97,9 @@ function git-tag-last() {
   printf "%s\n" $(git-tag-sorted | tail -1)
 }
 
-function git-tag-sorted() {
+# When git prints out tags with -l, they are sorted by not correctly when you
+# have versions like 1.0.10, which would come before 1.0.2.
+function git-tag-list-sorted() {
   git tag -l | sort -k 1n,1 -k 2n,2 -k 3n,3 -t '.'
 }
 
