@@ -50,7 +50,7 @@ function git-stash-merge() {
   git stash pop
 }
 
-function git-checkout() {
+function git-checkout-remote-branch() {
   git checkout --track -b $1 origin/$1
 }
 
