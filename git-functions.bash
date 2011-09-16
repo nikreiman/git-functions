@@ -19,18 +19,20 @@ function git-branch-current() {
 
 function git-pull-safe() {
   local currentBranch=$(git-branch-current)
-  local localLastCommit=$(git log $currentBranch | head -1 | cut -f 2 -d ' ')
-  local remoteLastCommit=$(git log origin/$currentBranch | head -1 | cut -f 2 -d ' ')
+  local localLastCommit=$(git log --format="%H" $currentBranch | head -1)
+  local localLastPushCommit="$(git log --format="%H" origin/${currentBranch}.. | tail -n-1)^"
+  #local remoteLastCommit=$(git log origin/$currentBranch | head -1 | cut -f 2 -d ' ')
 
   git fetch origin $currentBranch
-  local remoteHeadCommit=$(git log origin/$currentBranch | head -1 | cut -f 2 -d ' ')
+  local remoteHeadCommit=$(git log --format="%H" origin/$currentBranch | head -1)
   if [ "$remoteHeadCommit" = "$localLastCommit" ] ; then
     # Same message as git pull prints in this case
     printf "Already up-to-date.\n"
     return
   fi
 
-  git --no-pager log --oneline origin/$currentBranch ${remoteLastCommit}..HEAD
+  git --no-pager log --format="$gitLogFormatOneline" origin/$currentBranch ${localLastPushCommit}..HEAD \
+    --not $(git --no-pager log --format="%H" $currentBranch ${localLastPushCommit}..HEAD)
   local reply=
   echo
   while read -p "What should we do now? (merge/diff/quit) " reply ; do
@@ -38,7 +40,7 @@ function git-pull-safe() {
       git merge origin/$currentBranch
       break
     elif [ "$reply" = "d" -o "$reply" = "diff" ] ; then
-      git diff origin/$currentBranch ${remoteLastCommit}..${remoteHeadCommit}
+      git diff origin/$currentBranch ${localLastPushCommit}..HEAD
     elif [ "$reply" = "q" -o "$reply" = "quit" ] ; then
       return
     fi
