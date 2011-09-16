@@ -44,6 +44,13 @@ function git-pull-safe() {
   done
 }
 
+function git-log-for-branch() {
+  branch="$1"
+  git --no-pager log --format="$gitLogFormatShort" --no-merges $branch --not \
+    $(git for-each-ref --format="%(refname)" refs/remotes/origin | \
+      grep -F -v $branch)
+}
+
 function git-stash-merge() {
   git stash
   git merge origin/$(git-branch-current)
