@@ -1,4 +1,11 @@
 #!/bin/bash
+# A collection of random git functions which help out during my daily workflow.
+# This is kind of an expanded version of git aliases, with some other helper
+# functions added in as well.
+# To install, source this file from your ~/.bashrc
+#
+# All pull requests welcome. For more info, contact me at GitHub:
+# http://github.com/nikreiman
 
 # Prefer git in /usr/local to system default
 [ -e "/usr/local/bin/git" ] && alias git="/usr/local/bin/git"
