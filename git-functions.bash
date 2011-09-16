@@ -16,10 +16,6 @@ function git-branch-current() {
   printf "%s\n" $(git branch 2> /dev/null | grep -e ^* | tr -d "\* ")
 }
 
-function git-fetchall() {
-  git fetch --all
-}
-
 function git-pull-safe() {
   local currentBranch=$(git branch 2> /dev/null | grep -e ^* | tr -d "\* ")
   local localLastCommit=$(git log $currentBranch | head -1 | cut -f 2 -d ' ')
@@ -54,30 +50,8 @@ function git-stash-merge() {
   git stash pop
 }
 
-function git-push-dev() {
-  git push origin develop
-}
-
-function git-push-all() {
-  git push origin develop
-  git push origin master
-  git push origin --tags
-}
-
 function git-checkout() {
   git checkout --track -b $1 origin/$1
-}
-
-function git-log() {
-  local outputFormat=
-  if [ "$1" = "short" ] ; then
-    outputFormat=$gitLogFormatShort
-    shift
-  else
-    outputFormat="%C(yellow)%h %C(green)%cn %C(cyan)%cr %Creset%s"
-  fi
-
-  git log --format="$outputFormat" $*
 }
 
 function git-log-last-hash() {
