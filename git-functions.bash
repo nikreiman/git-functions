@@ -17,7 +17,7 @@ function git-branch-current() {
 }
 
 function git-pull-safe() {
-  local currentBranch=$(git branch 2> /dev/null | grep -e ^* | tr -d "\* ")
+  local currentBranch=$(git-branch-current)
   local localLastCommit=$(git log $currentBranch | head -1 | cut -f 2 -d ' ')
   local remoteLastCommit=$(git log origin/$currentBranch | head -1 | cut -f 2 -d ' ')
 
