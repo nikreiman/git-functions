@@ -2,8 +2,6 @@
 
 # Prefer git in /usr/local to system default
 [ -e "/usr/local/bin/git" ] && alias git="/usr/local/bin/git"
-source "$SCRIPTS/git-completion.bash"
-source "$SCRIPTS/git-flow-completion.bash"
 
 gitLogFormatShort="%C(cyan)%cr %Creset%s"
 
