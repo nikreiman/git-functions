@@ -21,7 +21,6 @@ function git-pull-safe() {
   local currentBranch=$(git-branch-current)
   local localLastCommit=$(git log --format="%H" $currentBranch | head -1)
   local localLastPushCommit="$(git log --format="%H" origin/${currentBranch}.. | tail -n-1)^"
-  #local remoteLastCommit=$(git log origin/$currentBranch | head -1 | cut -f 2 -d ' ')
 
   git fetch origin $currentBranch
   local remoteHeadCommit=$(git log --format="%H" origin/$currentBranch | head -1)
@@ -31,8 +30,7 @@ function git-pull-safe() {
     return
   fi
 
-  git --no-pager log --format="$gitLogFormatOneline" origin/$currentBranch ${localLastPushCommit}..HEAD \
-    --not $(git --no-pager log --format="%H" $currentBranch ${localLastPushCommit}..HEAD)
+  git --no-pager log --format="gitLogFormatOneline" origin/$currentBranch ^$currentBranch
   local reply=
   echo
   while read -p "What should we do now? (merge/diff/quit) " reply ; do
