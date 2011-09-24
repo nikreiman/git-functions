@@ -102,7 +102,7 @@ function git-tag-changelog() {
 }
 
 function git-tag-last() {
-  printf "%s\n" $(git-tag-sorted | tail -1)
+  printf "%s\n" $(git-tag-list-sorted | tail -1)
 }
 
 # When git prints out tags with -l, they are sorted by not correctly when you
