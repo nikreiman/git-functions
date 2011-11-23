@@ -60,6 +60,15 @@ function git-log-incoming() {
   git --no-pager log --format="$gitLogFormatOneline" origin/$branch ^$branch
 }
 
+function git-log-incoming-interactive() {
+  local branch=$(git-branch-current)
+  local response=
+  for i in $(git --no-pager log --format="%h" origin/$branch ^$branch) ; do
+    git show $i
+    read -p "Press any key to continue " response
+  done
+}
+
 function git-stash-merge() {
   git stash
   git merge origin/$(git-branch-current)
