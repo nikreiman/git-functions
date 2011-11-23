@@ -30,7 +30,7 @@ function git-pull-safe() {
     return
   fi
 
-  git --no-pager log --format="gitLogFormatOneline" origin/$currentBranch ^$currentBranch
+  git-log-incoming $currentBranch
   local reply=
   echo
   while read -p "What should we do now? (merge/diff/quit) " reply ; do
@@ -50,6 +50,14 @@ function git-log-for-branch() {
   git --no-pager log --format="$gitLogFormatShort" --no-merges $branch --not \
     $(git for-each-ref --format="%(refname)" refs/remotes/origin | \
       grep -F -v $branch)
+}
+
+function git-log-incoming() {
+  local branch=$1
+  if [ -z "$branch" ] ; then
+    branch=$(git-branch-current)
+  fi
+  git --no-pager log --format="$gitLogFormatOneline" origin/$branch ^$branch
 }
 
 function git-stash-merge() {
