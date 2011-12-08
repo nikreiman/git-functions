@@ -118,6 +118,10 @@ function git-tag-changelog() {
   git tag -v $tagName | tail -n +6
 }
 
+function git-tag-for-commit() {
+  git name-rev --name-only $1
+}
+
 function git-tag-last() {
   printf "%s\n" $(git-tag-list-sorted | tail -1)
 }
