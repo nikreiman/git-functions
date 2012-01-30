@@ -64,6 +64,7 @@ function git-log-incoming-interactive() {
   local branch=$(git-branch-current)
   local response=
   for i in $(git --no-pager log --format="%h" origin/$branch ^$branch) ; do
+    clear
     git show $i
     read -p "Press any key to continue " response
   done
